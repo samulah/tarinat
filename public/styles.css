@@ -702,3 +702,211 @@ button:active {
 .kuva-modal-close:hover {
     color: #ccc;
 }
+
+/* Omien sisältöjen modal */
+.sisallot-tilastot {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.sisallot-toiminnot {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.sisalto-nappi {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sisalto-nappi:hover {
+    background: #5a67d8;
+    transform: translateY(-1px);
+}
+
+.vaara-nappi {
+    background: #e53e3e;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.vaara-nappi:hover {
+    background: #c53030;
+    transform: translateY(-1px);
+}
+
+.sisalto-lista {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.oma-sisalto-item {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.oma-sisalto-item .poista-nappi {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e53e3e;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+.oma-sisalto-item .poista-nappi:hover {
+    background: #c53030;
+}
+
+/* Omien sisältöjen hallinta */
+.sisallot-tilastot {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border-left: 4px solid #667eea;
+}
+
+.sisallot-tilastot p {
+    margin: 5px 0;
+}
+
+.sisallot-toiminnot {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.sisalto-nappi {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.sisalto-nappi:hover {
+    background: #5a67d8;
+    transform: translateY(-2px);
+}
+
+.vaara-nappi {
+    background: #e53e3e;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.vaara-nappi:hover {
+    background: #c53030;
+    transform: translateY(-2px);
+}
+
+.sisalto-lista {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 15px;
+    background: #f8f9fa;
+}
+
+.oma-sisalto-item {
+    background: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.oma-sisalto-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.poista-nappi {
+    background: #e53e3e;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transition: background 0.3s ease;
+}
+
+.poista-nappi:hover {
+    background: #c53030;
+}
+
+/* Omien sisältöjen poista-napit */
+.poista-oma-nappi {
+    background: #e53e3e;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85em;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+}
+
+.poista-oma-nappi:hover {
+    background: #c53030;
+    transform: translateY(-1px);
+}
+
+.poista-oma-kommentti-nappi {
+    background: #e53e3e;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.8em;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+}
+
+.poista-oma-kommentti-nappi:hover {
+    background: #c53030;
+}

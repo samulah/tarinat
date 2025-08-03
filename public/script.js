@@ -148,6 +148,9 @@ async function luoTarinaElementti(tarina, kommentit) {
         console.error('Äänestystilan haku epäonnistui:', error);
     }
     
+    // Tarkista omistajuus
+    const onOma = await tarkistaOmistajuus('tarina', tarina._id);
+    
     // Lataa tagit
     let tagit = [];
     try {
@@ -191,10 +194,11 @@ async function luoTarinaElementti(tarina, kommentit) {
                 <a href="/tarina/${tarina._id}" class="avaa-tarina-nappi">
                     🔗 Avaa tarina
                 </a>
+                ${onOma ? `<button class="poista-oma-nappi" onclick="poistaOmaTarina('${tarina._id}')">🗑️ Poista oma</button>` : ''}
             </div>
             ${await luoTagitHTML(tarina._id, tagit)}
             <div class="kommentit">
-                ${kommentit.map(kommentti => luoKommenttiHTML(kommentti)).join('')}
+                ${(await Promise.all(kommentit.map(kommentti => luoKommenttiHTML(kommentti)))).join('')}
             </div>
         </div>
     `;
@@ -203,8 +207,11 @@ async function luoTarinaElementti(tarina, kommentit) {
 }
 
 // Luo kommentin HTML
-function luoKommenttiHTML(kommentti) {
+async function luoKommenttiHTML(kommentti) {
     const aika = new Date(kommentti.luotu).toLocaleString('fi-FI');
+    
+    // Tarkista omistajuus
+    const onOma = await tarkistaOmistajuus('kommentti', kommentti._id);
     
     return `
         <div class="kommentti">
@@ -212,6 +219,7 @@ function luoKommenttiHTML(kommentti) {
                 <span class="kommentti-numero">#${kommentti.numero}</span>
                 <span class="tarina-nimimerkki">${kommentti.nimimerkki}</span>
                 <span class="tarina-aika">${aika}</span>
+                ${onOma ? `<button class="poista-oma-kommentti-nappi" onclick="poistaOmaKommentti('${kommentti._id}')">🗑️</button>` : ''}
             </div>
             <div class="kommentti-media-section">
                 <img src="${kommentti.kuva}" alt="Kommentin kuva" class="kommentti-kuva">
@@ -240,6 +248,7 @@ async function lisaaTarina(event) {
         
         naytaOnnistuminen('Tarina lisätty onnistuneesti! 🎉');
         tarinaForm.reset();
+        tyhjennaOmatSisallotCache(); // Tyhjennä cache
         await lataaTarinat();
         
     } catch (error) {
@@ -295,6 +304,7 @@ async function lisaaKommentti(event) {
         
         naytaOnnistuminen('Kommentti lisätty onnistuneesti! 💬');
         suljeModal();
+        tyhjennaOmatSisallotCache(); // Tyhjennä cache
         await lataaTarinat();
         
     } catch (error) {
@@ -581,6 +591,7 @@ async function lisaaTagi(event) {
         
         naytaOnnistuminen('Tagi lisätty onnistuneesti! 🏷️');
         suljeTagiModal();
+        tyhjennaOmatSisallotCache(); // Tyhjennä cache
         // Päivitä vain kyseinen tarina
         await paivitaTaginenTarina(tarinaId);
         
@@ -661,13 +672,48 @@ async function paivitaTaginenTarina(tarinaId) {
 
 // OMIEN SISÄLTÖJEN HALLINTA
 
+// Cache omille sisällöille
+let omatSisallotCache = null;
+
+// Hae omat sisällöt (cachetettu)
+async function haeOmatSisallot() {
+    if (omatSisallotCache) {
+        return omatSisallotCache;
+    }
+    
+    try {
+        const response = await fetch(`${API_BASE}/api/mina/sisallot`);
+        if (!response.ok) {
+            throw new Error('Sisältöjen haku epäonnistui');
+        }
+        
+        omatSisallotCache = await response.json();
+        return omatSisallotCache;
+    } catch (error) {
+        console.error('Omien sisältöjen haku epäonnistui:', error);
+        return {
+            tarinat: 0,
+            kommentit: 0,
+            tagit: 0,
+            yhteensa: 0,
+            yksityiskohtia: {
+                tarinat: [],
+                kommentit: [],
+                tagit: []
+            }
+        };
+    }
+}
+
+// Tyhjennä cache (kun sisältö muuttuu)
+function tyhjennaOmatSisallotCache() {
+    omatSisallotCache = null;
+}
+
 // Tarkista onko sisältö käyttäjän oma
 async function tarkistaOmistajuus(tyyppi, id) {
     try {
-        const response = await fetch(`${API_BASE}/api/mina/sisallot`);
-        if (!response.ok) return false;
-        
-        const sisallot = await response.json();
+        const sisallot = await haeOmatSisallot();
         
         if (tyyppi === 'tarina') {
             return sisallot.yksityiskohtia.tarinat.some(tarina => tarina._id === id);
@@ -701,6 +747,7 @@ async function poistaOmaTarina(tarinaId) {
         }
         
         naytaOnnistuminen('Tarina poistettu onnistuneesti! 🗑️');
+        tyhjennaOmatSisallotCache(); // Tyhjennä cache
         await lataaTarinat(); // Päivitä listaus
         
     } catch (error) {
@@ -725,6 +772,7 @@ async function poistaOmaKommentti(kommenttiId) {
         }
         
         naytaOnnistuminen('Kommentti poistettu onnistuneesti! 🗑️');
+        tyhjennaOmatSisallotCache(); // Tyhjennä cache
         await lataaTarinat(); // Päivitä listaus
         
     } catch (error) {
@@ -749,6 +797,7 @@ async function poistaOmaTagi(tagiId) {
         }
         
         naytaOnnistuminen('Tagi poistettu onnistuneesti! 🗑️');
+        tyhjennaOmatSisallotCache(); // Tyhjennä cache
         await lataaTarinat(); // Päivitä listaus
         
     } catch (error) {
@@ -759,12 +808,7 @@ async function poistaOmaTagi(tagiId) {
 // Avaa oman sisällön hallintamodal
 async function avaaOmatSisallotModal() {
     try {
-        const response = await fetch(`${API_BASE}/api/mina/sisallot`);
-        if (!response.ok) {
-            throw new Error('Sisältöjen haku epäonnistui');
-        }
-        
-        const sisallot = await response.json();
+        const sisallot = await haeOmatSisallot();
         
         // Luo modal sisältö
         const modalHTML = `
@@ -801,7 +845,8 @@ async function avaaOmatSisallotModal() {
         window.omatSisallotData = sisallot;
         
     } catch (error) {
-        naytaVirhe('Sisältöjen lataus epäonnistui: ' + error.message);
+        console.error('Sisältöjen modal virhe:', error);
+        naytaVirhe('Sisältöjen lataus epäonnistui. Jos et ole luonut sisältöä vielä tämän päivityksen jälkeen, se on normaalia.');
     }
 }
 
@@ -903,6 +948,7 @@ async function poistaKaikkiOmatSisallot() {
         const result = await response.json();
         naytaOnnistuminen(`Kaikki sisältösi poistettu! (${result.poistettu.tarinat + result.poistettu.kommentit + result.poistettu.tagit} kohdetta)`);
         suljeOmatSisallotModal();
+        tyhjennaOmatSisallotCache(); // Tyhjennä cache
         await lataaTarinat(); // Päivitä listaus
         
     } catch (error) {

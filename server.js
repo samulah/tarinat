@@ -138,8 +138,11 @@ function generoiKayttajaId() {
 function varmistKayttajaTunniste(req, res, next) {
   let kayttajaId = req.cookies.kayttajaId;
   
+  console.log('Cookie kayttajaId:', kayttajaId);
+  
   if (!kayttajaId) {
     kayttajaId = generoiKayttajaId();
+    console.log('Uusi käyttäjätunniste luotu:', kayttajaId);
     res.cookie('kayttajaId', kayttajaId, { 
       maxAge: 365 * 24 * 60 * 60 * 1000, // 1 vuosi
       httpOnly: true,
@@ -148,6 +151,7 @@ function varmistKayttajaTunniste(req, res, next) {
   }
   
   req.kayttajaId = kayttajaId;
+  console.log('Käyttäjätunniste asetettu:', req.kayttajaId);
   next();
 }
 
@@ -562,9 +566,17 @@ app.delete('/api/mina/tagit/:id', varmistKayttajaTunniste, async (req, res) => {
 // Hae omat sisällöt
 app.get('/api/mina/sisallot', varmistKayttajaTunniste, async (req, res) => {
   try {
+    console.log('Käyttäjätunniste:', req.kayttajaId);
+    
     const tarinat = await Tarina.find({ kayttajaId: req.kayttajaId }).sort({ luotu: -1 });
     const kommentit = await Kommentti.find({ kayttajaId: req.kayttajaId }).sort({ luotu: -1 });
     const tagit = await Tagi.find({ kayttajaId: req.kayttajaId }).sort({ luotu: -1 });
+    
+    console.log('Löydetyt sisällöt:', {
+      tarinat: tarinat.length,
+      kommentit: kommentit.length,
+      tagit: tagit.length
+    });
     
     res.json({
       tarinat: tarinat.length,
@@ -578,6 +590,7 @@ app.get('/api/mina/sisallot', varmistKayttajaTunniste, async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Virhe sisältöjen haussa:', error);
     res.status(500).json({ error: error.message });
   }
 });
