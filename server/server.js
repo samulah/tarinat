@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static('public'));
+app.use(express.static('../client'));
 app.use('/uploads', express.static('uploads'));
 
 // Debug middleware - näyttää kaikki pyynnöt
@@ -528,7 +528,7 @@ app.delete('/api/mina/kommentit/:id', varmistKayttajaTunniste, async (req, res) 
     
     // Poista kuvatiedosto
     if (kommentti.kuva) {
-      const kuvaPolku = path.join(__dirname, 'public', kommentti.kuva);
+      const kuvaPolku = path.join(__dirname, kommentti.kuva); // kuva on jo muodossa /uploads/filename
       try {
         await fs.promises.unlink(kuvaPolku);
       } catch (err) {
@@ -759,17 +759,17 @@ app.delete('/api/admin/kommentit/:id', tarkistaAdmin, async (req, res) => {
 
 // Yksittäisen tarinan sivu
 app.get('/tarina/:id', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'tarina.html'));
+  res.sendFile(path.join(__dirname, '../client', 'tarina.html'));
 });
 
 // Admin-sivu
 app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+  res.sendFile(path.join(__dirname, '../client', 'admin.html'));
 });
 
 // Oletusreitti - palauta HTML-sivu
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, '../client', 'index.html'));
 });
 
 app.listen(PORT, () => {

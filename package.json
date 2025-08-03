@@ -2,10 +2,14 @@
   "name": "tarinat-projekti",
   "version": "1.0.0",
   "description": "Tarina-jakosivusto jossa käyttäjät voivat jakaa tarinoita ja kommentoida niitä",
-  "main": "server.js",
+  "main": "server/server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
+    "start": "cd server && node server.js",
+    "dev": "cd server && node server.js",
+    "server": "cd server && npm start",
+    "client": "cd client && npm run serve",
+    "install-server": "cd server && npm install",
+    "install-client": "cd client && npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -17,13 +21,8 @@
   ],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
-    "express": "^5.1.0",
-    "mongoose": "^8.17.0",
-    "multer": "^2.0.2",
-    "sharp": "^0.34.3"
-  }
+  "workspaces": [
+    "server",
+    "client"
+  ]
 }

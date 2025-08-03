@@ -1,0 +1,20 @@
+{
+  "name": "tarinat-client",
+  "version": "1.0.0",
+  "description": "Tarinat-projekti frontend client",
+  "main": "index.html",
+  "scripts": {
+    "serve": "python -m http.server 3001",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tarinat",
+    "frontend",
+    "client",
+    "html",
+    "css",
+    "javascript"
+  ],
+  "author": "",
+  "license": "ISC"
+}
