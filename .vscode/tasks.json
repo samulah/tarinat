@@ -1,0 +1,17 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Käynnistä Tarinat-sovellus",
+			"type": "shell",
+			"command": "wsl",
+			"args": [
+				"npm",
+				"start"
+			],
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}

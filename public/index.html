@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarinat - Jakosivusto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Tarinat</h1>
+            <p>Jaa tarinasi ja kommentoi muiden tarinoita</p>
+            <div class="header-toiminnot">
+                <button onclick="avaaOmatSisallotModal()" class="omat-sisallot-nappi">
+                    📁 Omat sisältöni
+                </button>
+            </div>
+        </header>
+
+        <!-- Uuden tarinan lomake -->
+        <section class="tarina-lomake">
+            <h2>Lisää uusi tarina</h2>
+            <form id="tarinaForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="nimimerkki">Nimimerkki (valinnainen):</label>
+                    <input type="text" id="nimimerkki" name="nimimerkki" placeholder="anonyymi">
+                </div>
+                
+                <div class="form-group">
+                    <label for="kuva">Kuva (pakollinen):</label>
+                    <input type="file" id="kuva" name="kuva" accept="image/*" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="teksti">Tarina (pakollinen):</label>
+                    <textarea id="teksti" name="teksti" rows="4" placeholder="Kirjoita tarinasi tähän..." required></textarea>
+                </div>
+                
+                <button type="submit">Julkaise tarina</button>
+            </form>
+        </section>
+
+        <!-- Haku-osio -->
+        <section class="haku-osio">
+            <h2>🔍 Hae tarinoita</h2>
+            <div class="haku-kentat">
+                <input type="text" id="hakuKentta" placeholder="Hae tarinoista, nimimerkeistä..." class="haku-input">
+                <input type="text" id="tagiHaku" placeholder="Hae tagilla (esim. koira)" class="haku-input">
+                <button id="hakuNappi" class="haku-nappi">Hae</button>
+                <button id="tyhjennaHaku" class="tyhjenna-nappi">Näytä kaikki</button>
+            </div>
+        </section>
+
+        <!-- Tarinoiden lista -->
+        <section class="tarinat">
+            <h2>Tarinat</h2>
+            <div id="tarinatLista" class="tarinat-lista">
+                <!-- Tarinat ladataan tähän JavaScript:llä -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Kommentti-modal -->
+    <div id="kommenttiModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Kommentoi tarinaa</h3>
+            <form id="kommenttiForm" enctype="multipart/form-data">
+                <input type="hidden" id="tarinaId" name="tarinaId">
+                
+                <div class="form-group">
+                    <label for="kommenttiNimimerkki">Nimimerkki (valinnainen):</label>
+                    <input type="text" id="kommenttiNimimerkki" name="nimimerkki" placeholder="anonyymi">
+                </div>
+                
+                <div class="form-group">
+                    <label for="kommenttiKuva">Kuva (pakollinen):</label>
+                    <input type="file" id="kommenttiKuva" name="kuva" accept="image/*" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="kommenttiTeksti">Kommentti (pakollinen):</label>
+                    <textarea id="kommenttiTeksti" name="teksti" rows="3" placeholder="Kirjoita kommenttisi tähän..." required></textarea>
+                </div>
+                
+                <button type="submit">Lisää kommentti</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tagi-modal -->
+    <div id="tagiModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeTagiModal">&times;</span>
+            <h3>Lisää tagi tarinaan</h3>
+            <form id="tagiForm">
+                <input type="hidden" id="tagiTarinaId" name="tarinaId">
+                
+                <div class="form-group">
+                    <label for="tagiNimi">Tagi (valinnainen #-merkki):</label>
+                    <input type="text" id="tagiNimi" name="nimi" placeholder="esim. hauska, koira, kissa" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tagiLuoja">Nimimerkki (valinnainen):</label>
+                    <input type="text" id="tagiLuoja" name="luoja" placeholder="anonyymi">
+                </div>
+                
+                <button type="submit">Lisää tagi</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Kuvan suurennusmodal -->
+    <div id="kuvaModal" class="kuva-modal">
+        <span class="kuva-modal-close">&times;</span>
+        <img class="kuva-modal-content" id="kuvaModalImg">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
