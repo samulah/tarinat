@@ -762,6 +762,11 @@ app.get('/tarina/:id', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'tarina.html'));
 });
 
+// Admin-sivu
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
 // Oletusreitti - palauta HTML-sivu
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
